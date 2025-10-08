@@ -8,6 +8,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -15,6 +16,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (password !== confirmPassword) {
         setError("Las contraseñas no coinciden");
@@ -42,11 +44,16 @@ function Register() {
           },
           body: JSON.stringify({ username, password }),
         });
-        login({ token: autoLogin.token });
+        const autoData = await autoLogin.json();
+
+        login({ token: autoData.token });
         navigate("/");
       }
     } catch (e) {
       console.error("aaaaaaa", e);
+      setError("Hubo un error al registrarse. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,8 +115,11 @@ function Register() {
                 />
               </div>
               <hr className="opacity-10"></hr>
-              <button className="bg-blue-500 w-full p-3 rounded-lg text-white mt-3 hover:bg-blue-600">
-                Create an account
+              <button
+                disabled={loading}
+                className="bg-blue-500 w-full p-3 rounded-lg text-white mt-3 hover:bg-blue-600"
+              >
+                {loading ? "Creating..." : "Create an account"}
               </button>
               <div className="text-center">
                 <label className="text-red-500">{error}</label>
