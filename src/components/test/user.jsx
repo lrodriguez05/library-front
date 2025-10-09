@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import { Trash } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "../AuthContext";
 
 const columns = [
   {
@@ -40,8 +41,21 @@ const columns = [
 
 function Delete({ userId }) {
   const { fetchUsers, data } = useContext(UserContext);
+  const { role } = useAuth();
 
   const handleDeleteUser = () => {
+    if (role !== "admin") {
+      alert("No tienes permisos para eliminar usuarios");
+      return;
+    }
+
+    const userToDelete = data.find((user) => user.id === userId);
+
+    if (userToDelete && userToDelete.role === "admin") {
+      alert("No se puede eliminar a otro administrador");
+      return;
+    }
+
     if (data.length === 1) {
       alert("No se puede eliminar el último usuario");
       return;

@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 const columns = [
   {
@@ -50,8 +51,14 @@ function Sede() {
     fetchSedes();
   }, []);
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h1>Hola desde sedes</h1>
+      <Link
+        to={"/crearSede"}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
+      >
+        Añadir Sede
+      </Link>
       <Table dataSource={data} columns={columns} loading={loading} />
     </div>
   );

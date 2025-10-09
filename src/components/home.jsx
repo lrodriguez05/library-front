@@ -1,9 +1,17 @@
 //import Content from "./home_components/content";
+//import { useNavigate } from "react-router";
 import { Outlet } from "react-router";
 import Aside from "./home_components/aside";
 import Header from "./home_components/header";
+//import { useAuth } from "./AuthContext";
 
 function Home() {
+  // const { token } = useAuth();
+  // const navigate = useNavigate();
+  // if (!token) {
+  //   navigate("/login");
+  // }
+
   return (
     <section className="grid grid-rows-[auto_1fr] md:grid-cols-[minmax(200px,15%)_1fr] h-screen bg-slate-100">
       <Header />

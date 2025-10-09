@@ -28,7 +28,7 @@ function Login() {
       }
 
       const data = await response.json();
-      login({ token: data.token });
+      login({ token: data.token, role: data.user });
       navigate("/");
     } catch (e) {
       console.error("aaaaaaa", e);
