@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 const columns = [
   {
@@ -75,6 +76,12 @@ function Libro() {
       >
         Refrescar libros
       </button>
+      <Link
+        to={"/crearLibro"}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
+      >
+        Añadir Libro
+      </Link>
       <Table dataSource={data} columns={columns} loading={loading}></Table>
     </div>
   );

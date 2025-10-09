@@ -7,6 +7,7 @@ import User from "./components/test/user";
 import Reports from "./components/test/reports";
 import Dashboard from "./components/test/dashboard";
 import Libros from "./components/home_components/libro";
+import CrearLibro from "./components/home_components/create_book";
 import Sedes from "./components/home_components/sede";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="libros" element={<Libros />} />
         <Route path="sedes" element={<Sedes />} />
+        <Route path="crearLibro" element={<CrearLibro />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
