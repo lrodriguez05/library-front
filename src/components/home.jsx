@@ -6,12 +6,6 @@ import Header from "./home_components/header";
 //import { useAuth } from "./AuthContext";
 
 function Home() {
-  // const { token } = useAuth();
-  // const navigate = useNavigate();
-  // if (!token) {
-  //   navigate("/login");
-  // }
-
   return (
     <section className="grid grid-rows-[auto_1fr] md:grid-cols-[minmax(200px,15%)_1fr] h-screen bg-slate-100">
       <Header />
