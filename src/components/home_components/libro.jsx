@@ -5,11 +5,6 @@ import { Trash } from "lucide-react";
 
 const columns = [
   {
-    title: "Id",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
     title: "Titulo",
     dataIndex: "titulo",
     key: "titulo",
