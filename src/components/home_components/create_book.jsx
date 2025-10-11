@@ -67,7 +67,7 @@ function CrearLibro() {
     }
   };
   return (
-    <section className="h-full flex flex-col items-center justify-center">
+    <section className="h-full flex flex-col items-center justify-center py-5">
       <form
         className="flex flex-col gap-4 border p-6 rounded shadow-md bg-white"
         onSubmit={handleSubmit}
