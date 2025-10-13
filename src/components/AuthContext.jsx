@@ -5,8 +5,8 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
   const [name, setName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [username, setUsername] = useState(null);

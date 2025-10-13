@@ -90,6 +90,7 @@ function EditBook({ bookId }) {
         console.log(bookData, titulo, autor);
         setTitulo(bookData.libro.titulo);
         setAutor(bookData.libro.autor);
+        setSedeId(bookData.libro.id_sede);
       }
       setOpen(true);
     } catch (e) {
@@ -136,7 +137,6 @@ function EditBook({ bookId }) {
         <Edit size={20} />
       </div>
       <Modal
-        title="Editor de libros"
         open={open}
         footer={null}
         destroyOnHidden
@@ -145,6 +145,9 @@ function EditBook({ bookId }) {
           setOpen(false);
         }}
       >
+        <h1 className="text-center text-bold text-2xl mb-5">
+          Editor de libros
+        </h1>
         <form onSubmit={handleEdit} className="space-y-4 mt-6">
           <div className="flex flex-col">
             <label className="text-lg mb-2">Titulo del libro</label>
@@ -172,7 +175,6 @@ function EditBook({ bookId }) {
               onChange={(e) => setSedeId(e.target.value)}
               className="border p-3 rounded-lg"
             >
-              <option value="">Selecciona una sede</option>
               {sedes.map((sede) => (
                 <option key={sede.id} value={sede.id}>
                   {sede.nombre}
