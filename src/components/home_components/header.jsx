@@ -11,13 +11,10 @@ function Header() {
     {
       key: "1",
       label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          Mi Cuenta
-        </a>
+        <p>
+          Logeado actualmente como el usuario {localStorage.getItem("name")}{" "}
+          {localStorage.getItem("lastName")}
+        </p>
       ),
     },
     {
@@ -51,7 +48,6 @@ function Header() {
       icon: <LogOut size={16} />,
       onClick: () => {
         logout();
-        navigate("/login");
       },
     },
   ];

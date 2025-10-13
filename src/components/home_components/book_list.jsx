@@ -19,6 +19,11 @@ const columns = [
     title: "Prestado",
     dataIndex: "prestado",
     key: "prestado",
+    render: (value) => (
+      <span className={value ? "text-red-500" : "text-green-500"}>
+        {value ? "Prestado" : "Disponible"}
+      </span>
+    ),
   },
   {
     title: "Sede",
