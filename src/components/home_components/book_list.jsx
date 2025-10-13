@@ -49,6 +49,7 @@ function EditBook({ bookId }) {
   const [sedes, setSedes] = useState([]);
   const [sedeId, setSedeId] = useState("");
   const [succes, setSucces] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleOpenModal = async (e) => {
     e.preventDefault();
@@ -175,8 +176,11 @@ function EditBook({ bookId }) {
             </select>
           </div>
           <div className="text-green-700 text-center">{succes}</div>
-          <button className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600">
-            Guardar cambios
+          <button
+            disabled={loading}
+            className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600"
+          >
+            {loading ? "Guardando Cambios" : "Guardar Cambios"}
           </button>
         </form>
       </Modal>
