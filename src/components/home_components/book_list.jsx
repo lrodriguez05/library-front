@@ -1,8 +1,10 @@
-import { Table } from "antd";
+import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
-import { Trash } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
+import { useAuth } from "../AuthContext";
 
 const columns = [
+  { title: "ID", dataIndex: "id", key: "id" },
   {
     title: "Titulo",
     dataIndex: "titulo",
@@ -28,15 +30,169 @@ const columns = [
     dataIndex: "",
     key: "action",
     render: (data) => {
-      return <Delete bookId={data.id} key={data.id} />;
+      return (
+        <div className="flex gap-3">
+          <Delete bookId={data.id} />
+          <EditBook bookId={data.id} />
+        </div>
+      );
     },
   },
 ];
 
+function EditBook({ bookId }) {
+  const { fetchLibros } = useContext(BookContext);
+  const { role } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [titulo, setTitulo] = useState("");
+  const [autor, setAutor] = useState("");
+  const [sedes, setSedes] = useState([]);
+  const [sedeId, setSedeId] = useState("");
+  const [succes, setSucces] = useState("");
+
+  const handleOpenModal = async (e) => {
+    e.preventDefault();
+
+    if (role !== "admin") {
+      alert("No tienes permisos para editar libros");
+      return;
+    }
+
+    try {
+      const bookResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const sedeResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/lib/sedes`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const sedeData = await sedeResponse.json();
+      setSedes(sedeData.sedes);
+      const bookData = await bookResponse.json();
+      if (bookResponse.ok) {
+        console.log(bookData, titulo, autor);
+        setTitulo(bookData.libro.titulo);
+        setAutor(bookData.libro.autor);
+      }
+      setOpen(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            titulo: titulo,
+            autor: autor,
+            id_sede: sedeId,
+          }),
+        }
+      );
+      if (response.ok) {
+        setSucces("Libro editado correctamente");
+        setTimeout(() => {
+          setOpen(false);
+          setSucces("");
+        }, 1500);
+
+        fetchLibros();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <div>
+      <div onClick={handleOpenModal}>
+        <Edit size={20} />
+      </div>
+      <Modal
+        title="Editor de libros"
+        open={open}
+        footer={null}
+        destroyOnHidden
+        centered
+        onCancel={() => {
+          setOpen(false);
+        }}
+      >
+        <form onSubmit={handleEdit} className="space-y-4 mt-6">
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Titulo del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Autor del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={autor}
+              onChange={(e) => setAutor(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Sede</label>
+            <select
+              required
+              value={sedeId}
+              onChange={(e) => setSedeId(e.target.value)}
+              className="border p-3 rounded-lg"
+            >
+              <option value="">Selecciona una sede</option>
+              {sedes.map((sede) => (
+                <option key={sede.id} value={sede.id}>
+                  {sede.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="text-green-700 text-center">{succes}</div>
+          <button className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600">
+            Guardar cambios
+          </button>
+        </form>
+      </Modal>
+    </div>
+  );
+}
+
 function Delete({ bookId }) {
   const { fetchLibros, data } = useContext(BookContext);
+  const { role } = useAuth();
 
   const handleDeleteBook = () => {
+    if (role !== "admin") {
+      alert("No tienes permisos para eliminar libros");
+      return;
+    }
     fetch(`${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`, {
       method: "DELETE",
       headers: {

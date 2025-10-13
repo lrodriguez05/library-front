@@ -51,7 +51,7 @@ function Login() {
                   value={username}
                   type="text"
                   className="border p-3 rounded-lg"
-                  onChange={(e) => getUsername(e.target.value)}
+                  onChange={(e) => (getUsername(e.target.value), setError(""))}
                 />
               </div>
               <div className="flex flex-col">
@@ -61,7 +61,7 @@ function Login() {
                   value={password}
                   type="password"
                   className="border p-3 rounded-lg"
-                  onChange={(e) => getPassword(e.target.value)}
+                  onChange={(e) => (getPassword(e.target.value), setError(""))}
                 />
               </div>
               <div className="flex justify-between items-center">
