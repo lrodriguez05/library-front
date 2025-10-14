@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export const AuthContext = createContext();
@@ -30,13 +30,13 @@ export function AuthProvider({ children }) {
     setName(null);
     setLastName(null);
     setUsername(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    localStorage.removeItem("name");
-    localStorage.removeItem("lastName");
+    localStorage.clear();
     navigate("/login");
   };
+
+  useEffect(() => {
+    if (!token) navigate("/login");
+  }, [token]);
 
   return (
     <AuthContext.Provider

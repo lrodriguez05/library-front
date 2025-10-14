@@ -3,48 +3,6 @@ import { useEffect, useState, createContext, useContext } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useAuth } from "../AuthContext";
 
-const columns = [
-  { title: "ID", dataIndex: "id", key: "id" },
-  {
-    title: "Titulo",
-    dataIndex: "titulo",
-    key: "titulo",
-  },
-  {
-    title: "Autor",
-    dataIndex: "autor",
-    key: "autor",
-  },
-  {
-    title: "Prestado",
-    dataIndex: "prestado",
-    key: "prestado",
-    render: (value) => (
-      <span className={value ? "text-red-500" : "text-green-500"}>
-        {value ? "Prestado" : "Disponible"}
-      </span>
-    ),
-  },
-  {
-    title: "Sede",
-    dataIndex: "sede",
-    key: "sede",
-  },
-  {
-    title: "Action",
-    dataIndex: "",
-    key: "action",
-    render: (data) => {
-      return (
-        <div className="flex gap-3">
-          <Delete bookId={data.id} />
-          <EditBook bookId={data.id} />
-        </div>
-      );
-    },
-  },
-];
-
 function EditBook({ bookId }) {
   const { fetchLibros } = useContext(BookContext);
   const { role } = useAuth();
@@ -204,6 +162,7 @@ function Delete({ bookId }) {
       alert("No tienes permisos para eliminar libros");
       return;
     }
+    if (!confirm("¿Seguro que deseas eliminar este libro?")) return;
     fetch(`${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`, {
       method: "DELETE",
       headers: {
@@ -230,6 +189,51 @@ function Delete({ bookId }) {
 const BookContext = createContext();
 
 function BookList() {
+  const { role } = useAuth();
+
+  const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    {
+      title: "Titulo",
+      dataIndex: "titulo",
+      key: "titulo",
+    },
+    {
+      title: "Autor",
+      dataIndex: "autor",
+      key: "autor",
+    },
+    {
+      title: "Prestado",
+      dataIndex: "prestado",
+      key: "prestado",
+      render: (value) => (
+        <span className={value ? "text-red-500" : "text-green-500"}>
+          {value ? "Prestado" : "Disponible"}
+        </span>
+      ),
+    },
+    {
+      title: "Sede",
+      dataIndex: "sede",
+      key: "sede",
+    },
+  ];
+  if (role === "admin") {
+    columns.push({
+      title: "Action",
+      dataIndex: "",
+      key: "action",
+      render: (data) => {
+        return (
+          <div className="flex gap-3">
+            <Delete bookId={data.id} />
+            <EditBook bookId={data.id} />
+          </div>
+        );
+      },
+    });
+  }
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 

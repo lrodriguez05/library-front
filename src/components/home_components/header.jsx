@@ -10,6 +10,7 @@ function Header() {
   const items = [
     {
       key: "1",
+      disabled: true,
       label: (
         <p>
           Logeado actualmente como el usuario {localStorage.getItem("name")}{" "}
@@ -17,6 +18,7 @@ function Header() {
         </p>
       ),
     },
+    { type: "divider" },
     {
       key: "2",
       label: (
