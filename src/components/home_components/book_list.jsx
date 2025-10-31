@@ -2,153 +2,18 @@ import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useAuth } from "../AuthContext";
+import { useNavigate } from "react-router";
 
-function EditBook({ bookId }) {
-  const { fetchLibros } = useContext(BookContext);
-  const { role } = useAuth();
-  const [open, setOpen] = useState(false);
-  const [titulo, setTitulo] = useState("");
-  const [autor, setAutor] = useState("");
-  const [sedes, setSedes] = useState([]);
-  const [sedeId, setSedeId] = useState("");
-  const [succes, setSucces] = useState("");
-  const [loading, setLoading] = useState(false);
+function ToEdit({ id }) {
+  const navigate = useNavigate();
 
-  const handleOpenModal = async (e) => {
-    e.preventDefault();
-
-    if (role !== "admin") {
-      alert("No tienes permisos para editar libros");
-      return;
-    }
-
-    try {
-      const bookResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      const sedeResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/lib/sedes`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      const sedeData = await sedeResponse.json();
-      setSedes(sedeData.sedes);
-      const bookData = await bookResponse.json();
-      if (bookResponse.ok) {
-        console.log(bookData, titulo, autor);
-        setTitulo(bookData.libro.titulo);
-        setAutor(bookData.libro.autor);
-        setSedeId(bookData.libro.id_sede);
-      }
-      setOpen(true);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleEdit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            titulo: titulo,
-            autor: autor,
-            id_sede: sedeId,
-          }),
-        }
-      );
-      if (response.ok) {
-        setSucces("Libro editado correctamente");
-        setTimeout(() => {
-          setOpen(false);
-          setSucces("");
-        }, 1500);
-
-        fetchLibros();
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const handleEdit = () => {
+    navigate(`/libros/editarLibro/${id}`);
   };
 
   return (
-    <div>
-      <div onClick={handleOpenModal}>
-        <Edit size={20} />
-      </div>
-      <Modal
-        open={open}
-        footer={null}
-        destroyOnHidden
-        centered
-        onCancel={() => {
-          setOpen(false);
-        }}
-      >
-        <h1 className="text-center text-bold text-2xl mb-5">
-          Editor de libros
-        </h1>
-        <form onSubmit={handleEdit} className="space-y-4 mt-6">
-          <div className="flex flex-col">
-            <label className="text-lg mb-2">Titulo del libro</label>
-            <input
-              className="border p-3 rounded-lg"
-              type="text"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="text-lg mb-2">Autor del libro</label>
-            <input
-              className="border p-3 rounded-lg"
-              type="text"
-              value={autor}
-              onChange={(e) => setAutor(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="text-lg mb-2">Sede</label>
-            <select
-              required
-              value={sedeId}
-              onChange={(e) => setSedeId(e.target.value)}
-              className="border p-3 rounded-lg"
-            >
-              {sedes.map((sede) => (
-                <option key={sede.id} value={sede.id}>
-                  {sede.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="text-green-700 text-center">{succes}</div>
-          <button
-            disabled={loading}
-            className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600"
-          >
-            {loading ? "Guardando Cambios" : "Guardar Cambios"}
-          </button>
-        </form>
-      </Modal>
+    <div onClick={handleEdit}>
+      <Edit size={20} />
     </div>
   );
 }
@@ -228,7 +93,7 @@ function BookList() {
         return (
           <div className="flex gap-3">
             <Delete bookId={data.id} />
-            <EditBook bookId={data.id} />
+            <ToEdit id={data.id} />
           </div>
         );
       },
@@ -251,8 +116,6 @@ function BookList() {
         }
       );
 
-      setLoading(false);
-
       if (!response.ok) {
         throw new Error("Error al obtener los libros");
       }
@@ -263,6 +126,8 @@ function BookList() {
     } catch (err) {
       setLoading(false);
       console.error("Error cargando libros:", err);
+    } finally {
+      setLoading(false);
     }
   };
 

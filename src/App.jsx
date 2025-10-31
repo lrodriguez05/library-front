@@ -11,6 +11,7 @@ import CrearLibro from "./components/home_components/create_book";
 import CrearSede from "./components/home_components/create_sede";
 import Sedes from "./components/home_components/sede";
 import ListaLibros from "./components/home_components/book_list";
+import EditBook from "./components/home_components/edit_book";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);
@@ -23,7 +24,9 @@ function App() {
         <Route path="libros" element={<Libros />}>
           <Route index element={<ListaLibros />} />
           <Route path="crearLibro" element={<CrearLibro />} />
+          <Route path="editarLibro/:id" element={<EditBook />} />
         </Route>
+
         <Route path="sedes" element={<Sedes />} />
 
         <Route path="crearSede" element={<CrearSede />} />
