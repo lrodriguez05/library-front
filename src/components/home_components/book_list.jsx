@@ -2,7 +2,8 @@ import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useAuth } from "../AuthContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 
 function ToEdit({ id }) {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ function Delete({ bookId }) {
   );
 }
 
-const BookContext = createContext();
+export const BookContext = createContext();
 
 function BookList() {
   const { role } = useAuth();
@@ -137,10 +138,21 @@ function BookList() {
 
   return (
     <BookContext.Provider value={{ fetchLibros, data }}>
-      <section>
-        <h1>Hola desde listado de libros</h1>
-        <Table dataSource={data} columns={columns} loading={loading}></Table>
-      </section>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <h2>Listado de Libros</h2>
+          <Link
+            to={"crearLibro"}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
+          >
+            Añadir Libro
+          </Link>
+        </div>
+        <section>
+          <Table dataSource={data} columns={columns} loading={loading}></Table>
+        </section>
+      </div>
+      <Outlet />
     </BookContext.Provider>
   );
 }

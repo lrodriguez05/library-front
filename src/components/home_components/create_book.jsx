@@ -1,6 +1,8 @@
+import Modal from "antd/es/modal/Modal";
 import { ArrowLeftIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router";
+import { BookContext } from "./book_list";
 
 function CrearLibro() {
   const navigate = useNavigate();
@@ -9,6 +11,8 @@ function CrearLibro() {
   const [loading, setLoading] = useState(false);
   const [sedes, setSedes] = useState([]);
   const [sedeId, setSedeId] = useState("");
+
+  const { fetchLibros } = useContext(BookContext);
 
   useEffect(() => {
     const fetchSedes = async () => {
@@ -62,6 +66,7 @@ function CrearLibro() {
         setTitle("");
         setAuthor("");
         setSedeId("");
+        fetchLibros();
         navigate("/libros");
       }
     } catch (e) {
@@ -71,59 +76,55 @@ function CrearLibro() {
     }
   };
   return (
-    <section className="h-full flex flex-col items-center justify-center py-5">
-      {" "}
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 mt-6 rounded shadow px-8 py-4 bg-white"
-      >
-        <Link to="/libros">
-          <ArrowLeftIcon />
-        </Link>
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Titulo del libro</label>
-          <input
-            className="border p-3 rounded-lg"
-            type="text"
-            value={title}
-            required
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Autor del libro</label>
-          <input
-            className="border p-3 rounded-lg"
-            type="text"
-            value={author}
-            required
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Sede</label>
-          <select
-            required
-            value={sedeId}
-            onChange={(e) => setSedeId(e.target.value)}
-            className="border p-3 rounded-lg"
-          >
-            <option>Seleccionar Sede</option>
-            {sedes.map((sede) => (
-              <option key={sede.id} value={sede.id}>
-                {sede.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button
-          disabled={loading}
-          className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600"
-        >
-          {loading ? "Agregando Libro" : "Agregar Libro"}
-        </button>
-      </form>
-    </section>
+    <Modal
+      open={true}
+      onCancel={() => navigate("/libros")}
+      okText={loading ? "Guardano..." : "Guardar Libro"}
+      cancelText="Cancelar"
+      onOk={handleSubmit}
+    >
+      <section className="h-full flex flex-col py-5 gap-5">
+        <h1 className="text-bold text-2xl">Crear Libro</h1>
+        <form className="space-y-4 py-4 bg-white">
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Titulo del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={title}
+              required
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Autor del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={author}
+              required
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Sede</label>
+            <select
+              required
+              value={sedeId}
+              onChange={(e) => setSedeId(e.target.value)}
+              className="border p-3 rounded-lg"
+            >
+              <option>Seleccionar Sede</option>
+              {sedes.map((sede) => (
+                <option key={sede.id} value={sede.id}>
+                  {sede.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+        </form>
+      </section>
+    </Modal>
   );
 }
 

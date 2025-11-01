@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Outlet } from "react-router";
 import Home from "./components/home";
 import Login from "./components/login";
 import Register from "./components/register";
@@ -6,7 +6,6 @@ import Register from "./components/register";
 import User from "./components/test/user";
 import Reports from "./components/test/reports";
 import Dashboard from "./components/test/dashboard";
-import Libros from "./components/home_components/libro";
 import CrearLibro from "./components/home_components/create_book";
 import CrearSede from "./components/home_components/create_sede";
 import Sedes from "./components/home_components/sede";
@@ -21,10 +20,12 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="user" element={<User />} />
         <Route path="reports" element={<Reports />} />
-        <Route path="libros" element={<Libros />}>
-          <Route index element={<ListaLibros />} />
-          <Route path="crearLibro" element={<CrearLibro />} />
-          <Route path="editarLibro/:id" element={<EditBook />} />
+
+        <Route path="libros" element={<Outlet />}>
+          <Route path="" element={<ListaLibros />}>
+            <Route path="editarLibro/:id" element={<EditBook />} />
+            <Route index path="crearLibro" element={<CrearLibro />} />
+          </Route>
         </Route>
 
         <Route path="sedes" element={<Sedes />} />

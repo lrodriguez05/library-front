@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useAuth } from "../AuthContext";
+import { Modal } from "antd";
+import { BookContext } from "./book_list";
 
 function EditBook() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ function EditBook() {
   const [sedeId, setSedeId] = useState("");
   const [succes, setSucces] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { fetchLibros } = useContext(BookContext);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -75,6 +79,7 @@ function EditBook() {
         setTimeout(() => {
           setSucces("");
         }, 1500);
+        fetchLibros();
         navigate("/libros");
       }
     } catch (e) {
@@ -82,51 +87,53 @@ function EditBook() {
     }
   };
   return (
-    <div>
-      <h1 className="text-center text-bold text-2xl mb-5">Editor de libros</h1>
-      <form onSubmit={handleEdit} className="space-y-4 mt-6">
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Titulo del libro</label>
-          <input
-            className="border p-3 rounded-lg"
-            type="text"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Autor del libro</label>
-          <input
-            className="border p-3 rounded-lg"
-            type="text"
-            value={autor}
-            onChange={(e) => setAutor(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-lg mb-2">Sede</label>
-          <select
-            required
-            value={sedeId}
-            onChange={(e) => setSedeId(e.target.value)}
-            className="border p-3 rounded-lg"
-          >
-            {sedes.map((sede) => (
-              <option key={sede.id} value={sede.id}>
-                {sede.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="text-green-700 text-center">{succes}</div>
-        <button
-          disabled={loading}
-          className="bg-blue-500 w-full p-3 rounded-lg text-white mt-2 hover:bg-blue-600"
-        >
-          {loading ? "Guardando Cambios" : "Guardar Cambios"}
-        </button>
-      </form>
-    </div>
+    <Modal
+      open={true}
+      onCancel={() => navigate("/libros")}
+      okText={loading ? "Guardando..." : "Guardar Cambios"}
+      cancelText="Cancelar"
+      onOk={handleEdit}
+    >
+      <div className="h-full flex flex-col py-5">
+        <h1 className="text-bold text-2xl mb-5">Editar Libro {titulo}</h1>
+        <form className="space-y-4 py-4 bg-white">
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Titulo del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Autor del libro</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="text"
+              value={autor}
+              onChange={(e) => setAutor(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Sede</label>
+            <select
+              required
+              value={sedeId}
+              onChange={(e) => setSedeId(e.target.value)}
+              className="border p-3 rounded-lg"
+            >
+              {sedes.map((sede) => (
+                <option key={sede.id} value={sede.id}>
+                  {sede.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="text-green-700 text-center">{succes}</div>
+        </form>
+      </div>
+    </Modal>
   );
 }
 
