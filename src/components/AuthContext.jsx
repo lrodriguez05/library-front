@@ -9,7 +9,8 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [name, setName] = useState(null);
   const [lastName, setLastName] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
 
   const login = ({ data }) => {
     setToken(data.token);
@@ -17,11 +18,13 @@ export function AuthProvider({ children }) {
     setName(data.name);
     setLastName(data.last_name);
     setUsername(data.username);
+    setUserId(data.id);
     localStorage.setItem("token", data.token);
     localStorage.setItem("role", data.role);
     localStorage.setItem("username", data.username);
     localStorage.setItem("name", data.name);
     localStorage.setItem("lastName", data.last_name);
+    localStorage.setItem("userId", data.id);
   };
 
   const logout = () => {
@@ -40,7 +43,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, role, login, logout, name, lastName, username }}
+      value={{ token, role, login, logout, name, lastName, username, userId }}
     >
       {children}
     </AuthContext.Provider>

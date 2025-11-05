@@ -13,6 +13,7 @@ function EditBook() {
   const [sedes, setSedes] = useState([]);
   const [sedeId, setSedeId] = useState("");
   const [succes, setSucces] = useState("");
+  const [cantidad, setCantidad] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const { fetchLibros } = useContext(BookContext);
@@ -51,6 +52,7 @@ function EditBook() {
         setTitulo(bookData.libro.titulo);
         setAutor(bookData.libro.autor);
         setSedeId(bookData.libro.id_sede);
+        setCantidad(bookData.libro.cantidad);
       }
     } catch (e) {
       console.log(e);
@@ -71,6 +73,7 @@ function EditBook() {
             titulo: titulo,
             autor: autor,
             id_sede: sedeId,
+            cantidad: cantidad,
           }),
         }
       );
@@ -129,6 +132,15 @@ function EditBook() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Cantidad de Ejemplares</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="number"
+              value={cantidad}
+              onChange={(e) => setCantidad(e.target.value)}
+            />
           </div>
           <div className="text-green-700 text-center">{succes}</div>
         </form>

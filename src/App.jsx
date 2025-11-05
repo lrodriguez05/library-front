@@ -11,6 +11,7 @@ import CrearSede from "./components/home_components/create_sede";
 import Sedes from "./components/home_components/sede";
 import ListaLibros from "./components/home_components/book_list";
 import EditBook from "./components/home_components/edit_book";
+import Prestamos from "./components/home_components/loan";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);
@@ -20,6 +21,7 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="user" element={<User />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="prestamos" element={<Prestamos />} />
 
         <Route path="libros" element={<Outlet />}>
           <Route path="" element={<ListaLibros />}>

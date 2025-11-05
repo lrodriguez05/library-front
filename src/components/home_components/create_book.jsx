@@ -9,6 +9,7 @@ function CrearLibro() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cantidad, setCantidad] = useState(1);
   const [sedes, setSedes] = useState([]);
   const [sedeId, setSedeId] = useState("");
 
@@ -40,8 +41,13 @@ function CrearLibro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!sedeId) {
-      alert("Por favor selecciona una sede.");
+    if (!title || !author || !sedeId) {
+      alert("Por favor ingrese los datos requeridos.");
+      return;
+    }
+
+    if (cantidad <= 0) {
+      alert("La cantidad de ejemplares debe ser al menos 1.");
       return;
     }
 
@@ -59,6 +65,7 @@ function CrearLibro() {
             titulo: title,
             autor: author,
             sede_id: sedeId,
+            cantidad: cantidad,
           }),
         }
       );
@@ -66,6 +73,7 @@ function CrearLibro() {
         setTitle("");
         setAuthor("");
         setSedeId("");
+        setCantidad(1);
         fetchLibros();
         navigate("/libros");
       }
@@ -121,6 +129,17 @@ function CrearLibro() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg mb-2">Cantidad de Ejemplares</label>
+            <input
+              className="border p-3 rounded-lg"
+              type="number"
+              value={cantidad}
+              min={1}
+              required
+              onChange={(e) => setCantidad(e.target.value)}
+            />
           </div>
         </form>
       </section>

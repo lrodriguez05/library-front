@@ -4,7 +4,7 @@ import MenuLink from "../home_components/menu_link";
 const menuItems = [
   { label: "Dashboard", path: "/", icon: LayoutDashboard },
   { label: "Usuarios", path: "/user", icon: Users },
-  { label: "Reportes", path: "/reports", icon: BarChart3 },
+  { label: "Prestamos", path: "/prestamos", icon: BarChart3 },
   { label: "Libros", path: "/libros", icon: Book },
   { label: "Sedes", path: "/sedes", icon: School },
 ];

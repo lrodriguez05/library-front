@@ -28,6 +28,7 @@ function Login() {
       }
 
       const data = await response.json();
+      console.log(data);
       login({ data });
       navigate("/");
     } catch (e) {

@@ -1,9 +1,89 @@
 import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, Eye } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { Link, useNavigate } from "react-router";
 import { Outlet } from "react-router";
+
+function Loan({ id, title }) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState("");
+  const actualDate = new Date().toISOString().split("T")[0];
+  const { userId } = useAuth();
+  const navigate = useNavigate();
+  const handleLoan = async (id) => {
+    if (!date) {
+      alert("Por favor ingrese una fecha de devolucion");
+      return;
+    }
+    if (date <= actualDate) {
+      alert("La fecha de devolucion debe ser posterior a la fecha actual");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/lib/prestados/registrar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            id_libro: id,
+            usuario: userId,
+            fecha_devolucion: date,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        alert("Libro prestado con exito");
+        navigate("/prestamos");
+      } else {
+        alert(`Error al prestar libro: ${data.message}`);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleClose = (id) => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Eye
+        size={20}
+        onClick={() => {
+          setOpen(true);
+        }}
+      />
+      <Modal
+        open={open}
+        onCancel={handleClose}
+        title={title}
+        okText="Prestar"
+        cancelText="Cancelar"
+        onOk={() => {
+          handleLoan(id, title);
+        }}
+      >
+        <p>
+          Desea perdir prestado el libro: {title}, por favor introduzca de
+          devolucion del libro
+        </p>
+        <br></br>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        ></input>
+      </Modal>
+    </div>
+  );
+}
 
 function ToEdit({ id }) {
   const navigate = useNavigate();
@@ -19,7 +99,7 @@ function ToEdit({ id }) {
   );
 }
 
-function Delete({ bookId }) {
+function Delete({ id }) {
   const { fetchLibros, data } = useContext(BookContext);
   const { role } = useAuth();
 
@@ -29,7 +109,7 @@ function Delete({ bookId }) {
       return;
     }
     if (!confirm("¿Seguro que deseas eliminar este libro?")) return;
-    fetch(`${import.meta.env.VITE_API_URL}/lib/libros/${bookId}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/lib/libros/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -79,6 +159,17 @@ function BookList() {
         </span>
       ),
     },
+
+    {
+      title: "Cant. Ejemplares",
+      dataIndex: "cantidad",
+      key: "cantidad",
+    },
+    {
+      title: "Veces Prestado",
+      dataIndex: "veces_prestado",
+      key: "veces_prestado",
+    },
     {
       title: "Sede",
       dataIndex: "sede",
@@ -93,8 +184,22 @@ function BookList() {
       render: (data) => {
         return (
           <div className="flex gap-3">
-            <Delete bookId={data.id} />
+            <Delete id={data.id} />
             <ToEdit id={data.id} />
+            <Loan id={data.id} title={data.titulo} autor={data.autor} />
+          </div>
+        );
+      },
+    });
+  } else {
+    columns.push({
+      title: "Action",
+      dataIndex: "",
+      key: "action",
+      render: (data) => {
+        return (
+          <div className="flex gap-3">
+            <Loan id={data.id} title={data.titulo} autor={data.autor} />
           </div>
         );
       },
