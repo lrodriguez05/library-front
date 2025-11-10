@@ -3,47 +3,13 @@ import { Trash } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 
-const columns = [
-  {
-    title: "Id",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Last Name",
-    dataIndex: "last_name",
-    key: "last_name",
-  },
-  {
-    title: "Username",
-    dataIndex: "username",
-    key: "username",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
-  },
-  {
-    title: "Action",
-    dataIndex: "",
-    key: "action",
-    render: (data) => {
-      return <Delete userId={data.id} key={data.id} />;
-    },
-  },
-];
-
 function Delete({ userId }) {
   const { fetchUsers, data } = useContext(UserContext);
   const { role } = useAuth();
 
   const handleDeleteUser = () => {
+    if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+
     if (role !== "admin") {
       alert("No tienes permisos para eliminar usuarios");
       return;
@@ -89,6 +55,43 @@ const UserContext = createContext();
 function User() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { role } = useAuth();
+
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Last Name",
+      dataIndex: "last_name",
+      key: "last_name",
+    },
+    {
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+  ];
+
+  if (role === "admin") {
+    columns.push({
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => <Delete userId={record.id} />,
+    });
+  }
 
   const fetchUsers = async () => {
     try {

@@ -49,9 +49,14 @@ function Register() {
         login({ token: autoData.token });
         navigate("/");
       }
-    } catch (e) {
-      console.error("aaaaaaa", e);
-      setError("Hubo un error al registrarse. Intenta de nuevo.");
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Error al crear la cuenta");
+      }
+    } catch (error) {
+      console.error("Error: ", error.message);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -114,17 +119,16 @@ function Register() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-              <hr className="opacity-10"></hr>
+              <hr className="opacity-10"></hr>{" "}
+              <div className="text-center">
+                <label className="text-red-500">{error}</label>
+              </div>
               <button
                 disabled={loading}
                 className="bg-blue-500 w-full p-3 rounded-lg text-white mt-3 hover:bg-blue-600"
               >
                 {loading ? "Creating..." : "Create an account"}
               </button>
-              <div className="text-center">
-                <label className="text-red-500">{error}</label>
-              </div>
-
               <p>
                 Already have an account?{" "}
                 <Link

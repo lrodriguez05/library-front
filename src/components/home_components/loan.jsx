@@ -1,8 +1,8 @@
-import { Table } from "antd";
+import { Table, Modal } from "antd";
 import { createContext, useEffect, useState } from "react";
 import moment from "moment";
 import { useAuth } from "../AuthContext";
-import { EyeClosed } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 
 const LoanContext = createContext();
 
@@ -31,6 +31,85 @@ function Prestamos() {
       console.error("Error devolviendo el libro:", err);
     }
   };
+
+  function CreateReview({ id }) {
+    const [openModal, setOpenModal] = useState(false);
+    const [resena, setResena] = useState("");
+    const [calificacion, setCalificacion] = useState(1);
+    const handleOpenReviewModal = () => {
+      setOpenModal(true);
+      console.log("Open review modal for book ID:", id);
+    };
+
+    const handleReview = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/lib/resenas/crearResena/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              id_libro: id,
+              comentario: resena,
+              calificacion: calificacion,
+              usuario: userId,
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Error al crear la reseña");
+        }
+        setOpenModal(false);
+      } catch (err) {
+        console.error("Error creando la reseña:", err);
+      }
+    };
+
+    return (
+      <div>
+        <BookOpen
+          onClick={handleOpenReviewModal}
+          size={20}
+          className="cursor-pointer"
+        />
+        <Modal
+          title="Crear Reseña"
+          open={openModal}
+          onCancel={() => setOpenModal(false)}
+          onOk={() => {
+            handleReview();
+            setOpenModal(false);
+          }}
+        >
+          <form className="space-y-4 py-4 bg-white">
+            <div className="flex flex-col">
+              <label className="text-lg mb-2">Calificacion de 1-10</label>
+              <input
+                className="border p-3 rounded-lg"
+                type="number"
+                min="1"
+                max="10"
+                value={calificacion}
+                onChange={(e) => setCalificacion(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-lg mb-2">Escriba su reseña</label>
+              <input
+                className="border p-3 rounded-lg"
+                type="text"
+                value={resena}
+                onChange={(e) => setResena(e.target.value)}
+              />
+            </div>
+          </form>
+        </Modal>
+      </div>
+    );
+  }
 
   const fetchPrestamos = async () => {
     if (role !== "admin") {
@@ -79,6 +158,10 @@ function Prestamos() {
       setLoading(false);
       console.error("Error cargando prestamos:", err);
     }
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
   };
 
   useEffect(() => {
@@ -137,12 +220,14 @@ function Prestamos() {
       key: "action",
       render: (data) => {
         return (
-          console.log(data),
-          (
-            <div>
-              <EyeClosed onClick={handleBack(data.id)} />
-            </div>
-          )
+          <div className="flex gap-3">
+            <CreateReview id={data.id_libro} />
+            <ArrowLeft
+              onClick={handleBack(data.id)}
+              size={20}
+              className="cursor-pointer"
+            />
+          </div>
         );
       },
     },

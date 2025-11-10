@@ -15,6 +15,10 @@ function EditBook() {
   const [succes, setSucces] = useState("");
   const [cantidad, setCantidad] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [detalles, setDetalles] = useState({});
+  const [anioPub, setAnioPub] = useState("");
+  const [edicion, setEdicion] = useState("");
+  const [imagen, setImagen] = useState("");
 
   const { fetchLibros } = useContext(BookContext);
 
@@ -53,6 +57,10 @@ function EditBook() {
         setAutor(bookData.libro.autor);
         setSedeId(bookData.libro.id_sede);
         setCantidad(bookData.libro.cantidad);
+        setDetalles(bookData.libro.detalles);
+        setAnioPub(bookData.libro.anio_publicacion);
+        setEdicion(bookData.libro.edicion);
+        setImagen(bookData.libro.imagen);
       }
     } catch (e) {
       console.log(e);
@@ -74,6 +82,10 @@ function EditBook() {
             autor: autor,
             id_sede: sedeId,
             cantidad: cantidad,
+            detalles: detalles,
+            anio_publicacion: anioPub,
+            edicion: edicion,
+            imagen: imagen,
           }),
         }
       );
@@ -140,6 +152,61 @@ function EditBook() {
               type="number"
               value={cantidad}
               onChange={(e) => setCantidad(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="text-lg mb-2">Edicion</label>
+            <input
+              className="border p-3 rounded-lg w-full"
+              type="text"
+              value={edicion}
+              onChange={(e) => setEdicion(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="text-lg mb-2">Año de publicacion</label>
+            <input
+              className="border p-3 rounded-lg w-full"
+              type="date"
+              value={anioPub}
+              onChange={(e) => setAnioPub(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="text-lg mb-2">Fuente de Imagen</label>
+            <input
+              className="border p-3 rounded-lg w-full"
+              type="text"
+              value={imagen}
+              onChange={(e) => setImagen(e.target.value)}
+              // type="file"
+              // accept="image/*"
+              // onChange={(e) => {
+              //   const file = e.target.files[0];
+              //   if (!file) return;
+
+              //   const reader = new FileReader();
+              //   reader.onloadend = () => {
+              //     setImagen(reader.result); // aquí guardamos el Base64
+              //   };
+              //   reader.readAsDataURL(file); // convierte a Base64
+              // }}
+            />
+            {imagen && (
+              <img
+                src={imagen}
+                alt="Preview"
+                className="w-32 mt-2 border rounded-md"
+              />
+            )}
+          </div>
+          <div>
+            <label className="text-lg mb-2">Detalles</label>
+            <textarea
+              className="border p-3 rounded-lg w-full"
+              type="text"
+              value={detalles}
+              onChange={(e) => setDetalles(e.target.value)}
             />
           </div>
           <div className="text-green-700 text-center">{succes}</div>

@@ -1,11 +1,12 @@
 import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
-import { Edit, Trash, Eye } from "lucide-react";
+import { Edit, Trash, Eye, Info } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { Link, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
 function Loan({ id, title }) {
+  const { fetchLibros } = useContext(BookContext);
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState("");
   const actualDate = new Date().toISOString().split("T")[0];
@@ -38,8 +39,8 @@ function Loan({ id, title }) {
       );
       const data = await response.json();
       if (response.ok) {
-        alert("Libro prestado con exito");
-        navigate("/prestamos");
+        fetchLibros();
+        setOpen(false);
       } else {
         alert(`Error al prestar libro: ${data.message}`);
       }
@@ -95,6 +96,20 @@ function ToEdit({ id }) {
   return (
     <div onClick={handleEdit}>
       <Edit size={20} />
+    </div>
+  );
+}
+
+function ToDetails({ id }) {
+  const navigate = useNavigate();
+
+  const handleDetails = () => {
+    navigate(`/libros/detalles/${id}`);
+  };
+
+  return (
+    <div onClick={handleDetails}>
+      <Info size={20} />
     </div>
   );
 }
@@ -187,6 +202,7 @@ function BookList() {
             <Delete id={data.id} />
             <ToEdit id={data.id} />
             <Loan id={data.id} title={data.titulo} autor={data.autor} />
+            <ToDetails id={data.id} />
           </div>
         );
       },
@@ -200,6 +216,7 @@ function BookList() {
         return (
           <div className="flex gap-3">
             <Loan id={data.id} title={data.titulo} autor={data.autor} />
+            <ToDetails id={data.id} />
           </div>
         );
       },
