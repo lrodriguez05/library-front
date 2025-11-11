@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import moment from "moment";
+import ReviewRender from "./details_components/review_render";
+import {
+  fetchBookDetails,
+  fetchReviews,
+} from "./details_components/fetch_details";
 
 function Details() {
   const { id } = useParams();
@@ -8,78 +12,20 @@ function Details() {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const fetchBookDetails = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/lib/libros/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setDataBook(data.libro);
-        if (response.ok) {
-          console.log(data);
-        }
+        const [book, resenas] = Promise.all([
+          fetchBookDetails(id),
+          fetchReviews(id),
+        ]);
+        setDataBook(book);
+        setReviews(resenas);
       } catch (error) {
         console.error(error);
       }
     };
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/lib/resenas/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setReviews(data.resenas);
-        if (response.ok) {
-          console.log(data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchBookDetails();
-    fetchReviews();
+    fetchData();
   }, [id]);
-
-  function ReviewRender() {
-    return (
-      <div>
-        {reviews?.length === 0 ? (
-          <p>No hay resenas para este libro aun</p>
-        ) : (
-          reviews.map((review) => (
-            <div className="py-4 flex items-center gap-3" key={review.id}>
-              <img className="w-12 h-12 rounded-full" src={review.avatar}></img>
-              <div className="font-bold bg-gray-200 p-2 rounded">
-                <div className="flex justify-between">
-                  <p>Usuario: {review.username}</p>
-                  <p>{review.editado ? "Editado" : ""}</p>
-                </div>
-                <p className="py-2">{review.comentario}</p>
-                <div className="flex justify-between">
-                  <p>Calificacion {review.calificacion}/10</p>
-                  <p>
-                    {moment(review.fecha).local().format("DD/MM/YYYY HH:mm")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    );
-  }
 
   return (
     <>
@@ -100,7 +46,7 @@ function Details() {
       <p>Detalles {dataBook?.detalles}</p>
       <hr></hr>
       <section className="p-4">
-        <ReviewRender />
+        <ReviewRender reviews={reviews} />
       </section>
     </>
   );
