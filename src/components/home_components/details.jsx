@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import moment from "moment";
 
 function Details() {
   const { id } = useParams();
@@ -54,15 +55,28 @@ function Details() {
   function ReviewRender() {
     return (
       <div>
-        {reviews.map((review) => (
-          <div className="p-4" key={review.id}>
-            <div className="font-bold bg-gray-200 p-2 rounded">
-              <p>Usuario: {review.username}</p>
-              <p>{review.comentario}</p>
-              <p>Calificacion {review.calificacion}/10</p>
+        {reviews?.length === 0 ? (
+          <p>No hay resenas para este libro aun</p>
+        ) : (
+          reviews.map((review) => (
+            <div className="py-4 flex items-center gap-3" key={review.id}>
+              <img className="w-12 h-12 rounded-full" src={review.avatar}></img>
+              <div className="font-bold bg-gray-200 p-2 rounded">
+                <div className="flex justify-between">
+                  <p>Usuario: {review.username}</p>
+                  <p>{review.editado ? "Editado" : ""}</p>
+                </div>
+                <p className="py-2">{review.comentario}</p>
+                <div className="flex justify-between">
+                  <p>Calificacion {review.calificacion}/10</p>
+                  <p>
+                    {moment(review.fecha).local().format("DD/MM/YYYY HH:mm")}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     );
   }
@@ -78,7 +92,7 @@ function Details() {
         <p>Titulo del libro {dataBook?.titulo}</p>
         <p>Autor {dataBook?.autor}</p>
         <p>Cantidad {dataBook?.cantidad}</p>
-        <p>Sede {dataBook?.id_sede}</p>
+        <p>Sede {dataBook?.sede}</p>
 
         <p>Edicion {dataBook?.edicion}</p>
         <p>Año de Publicacion {dataBook?.anio_publicacion}</p>

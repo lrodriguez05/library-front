@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { Trash } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../auth_components/AuthContext";
 
 function Delete({ userId }) {
   const { fetchUsers, data } = useContext(UserContext);

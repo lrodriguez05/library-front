@@ -1,5 +1,5 @@
 import { Book, LogOut, UserRound } from "lucide-react";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../auth_components/AuthContext";
 import { Dropdown } from "antd";
 import { useNavigate } from "react-router";
 
@@ -12,10 +12,10 @@ function Header() {
       key: "1",
       disabled: true,
       label: (
-        <p>
-          Logeado actualmente como el usuario {localStorage.getItem("name")}{" "}
-          {localStorage.getItem("lastName")}
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <img src={localStorage.getItem("avatar")} alt="avatar" width={50} />
+          <p>Welcome back {localStorage.getItem("username")}</p>
+        </div>
       ),
     },
     { type: "divider" },

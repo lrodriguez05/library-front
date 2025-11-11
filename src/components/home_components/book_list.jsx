@@ -1,7 +1,7 @@
 import { Modal, Table } from "antd";
 import { useEffect, useState, createContext, useContext } from "react";
 import { Edit, Trash, Eye, Info } from "lucide-react";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../auth_components/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 

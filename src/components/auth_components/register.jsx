@@ -45,8 +45,9 @@ function Register() {
           body: JSON.stringify({ username, password }),
         });
         const autoData = await autoLogin.json();
+        console.log(autoData);
 
-        login({ token: autoData.token });
+        login({ data: autoData });
         navigate("/");
       }
 
@@ -55,7 +56,7 @@ function Register() {
         throw new Error(data.message || "Error al crear la cuenta");
       }
     } catch (error) {
-      console.error("Error: ", error.message);
+      //console.error("Error: ", error.message);
       setError(error.message);
     } finally {
       setLoading(false);

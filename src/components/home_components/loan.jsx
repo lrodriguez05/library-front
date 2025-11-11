@@ -1,7 +1,7 @@
 import { Table, Modal } from "antd";
 import { createContext, useEffect, useState } from "react";
 import moment from "moment";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../auth_components/AuthContext";
 import { ArrowLeft, BookOpen } from "lucide-react";
 
 const LoanContext = createContext();
@@ -208,8 +208,8 @@ function Prestamos() {
       key: "devuelto",
       render: (data) => {
         return (
-          <span className={data ? "text-red-500" : "text-green-500"}>
-            {data ? "Disponible" : "Prestado"}
+          <span className={data ? "text-green-500" : "text-red-500"}>
+            {data ? "Devuelto" : "Prestado"}
           </span>
         );
       },
