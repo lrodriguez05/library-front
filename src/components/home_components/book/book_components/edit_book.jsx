@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useAuth } from "../auth_components/AuthContext";
+import { useAuth } from "../../../auth_components/AuthContext";
 import { Modal } from "antd";
 import { BookContext } from "./book_list";
 

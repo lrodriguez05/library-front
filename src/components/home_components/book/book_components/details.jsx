@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import ReviewRender from "./details_components/review_render";
-import {
-  fetchBookDetails,
-  fetchReviews,
-} from "./details_components/fetch_details";
+import ReviewRender from "../../details_components/review_render";
+import { getBookById } from "../../../../services/book_services";
+import { getReviewsByBookId } from "../../../../services/review_services";
 
 function Details() {
   const { id } = useParams();
@@ -14,11 +12,11 @@ function Details() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [book, resenas] = Promise.all([
-          fetchBookDetails(id),
-          fetchReviews(id),
+        const [libro, resenas] = await Promise.all([
+          getBookById(id),
+          getReviewsByBookId(id),
         ]);
-        setDataBook(book);
+        setDataBook(libro);
         setReviews(resenas);
       } catch (error) {
         console.error(error);

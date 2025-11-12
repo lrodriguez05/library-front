@@ -5,13 +5,13 @@ import Register from "./components/auth_components/register";
 
 import User from "./components/home_components/user";
 import Dashboard from "./components/home_components/dashboard";
-import CrearLibro from "./components/home_components/create_book";
+import CrearLibro from "./components/home_components/book/book_components/create_book";
 import CrearSede from "./components/home_components/create_sede";
 import Sedes from "./components/home_components/sede";
-import ListaLibros from "./components/home_components/book_list";
-import EditBook from "./components/home_components/edit_book";
+import ListaLibros from "./components/home_components/book/book_components/book_list";
+import EditBook from "./components/home_components/book/book_components/edit_book";
 import Prestamos from "./components/home_components/loan";
-import Details from "./components/home_components/details";
+import Details from "./components/home_components/book/book_components/details";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);
