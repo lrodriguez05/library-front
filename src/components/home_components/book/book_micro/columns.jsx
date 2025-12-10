@@ -17,7 +17,7 @@ export function columnsGenerator(role) {
       key: "autor",
     },
     {
-      title: "Prestado",
+      title: "Estado",
       dataIndex: "prestado",
       key: "prestado",
       render: (value) => (

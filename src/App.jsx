@@ -11,7 +11,7 @@ import Sedes from "./components/home_components/sede";
 import ListaLibros from "./components/home_components/book/book_components/book_list";
 import EditBook from "./components/home_components/book/book_components/edit_book";
 import Prestamos from "./components/home_components/loan";
-import Details from "./components/home_components/book/book_components/details";
+import Details from "./components/home_components/details_components/details";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);

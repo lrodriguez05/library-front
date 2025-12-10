@@ -15,7 +15,7 @@ function ReviewRender({ reviews }) {
                 <p>{review.editado ? "Editado" : ""}</p>
               </div>
               <p className="py-2">{review.comentario}</p>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-5">
                 <p>Calificacion {review.calificacion}/10</p>
                 <p>{moment(review.fecha).local().format("DD/MM/YYYY HH:mm")}</p>
               </div>
