@@ -3,7 +3,7 @@ function DetailsRender({ dataBook }) {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
       <div className="w-full flex justify-center items-center lg:col-span-1">
         <img
-          className="rounded-lg w-full max-h-[40rem] object-cover "
+          className="rounded-lg w-full max-h-[40rem] object-cover"
           src={dataBook?.imagen}
           alt="Imagen del libro"
         />

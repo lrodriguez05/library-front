@@ -1,9 +1,6 @@
-//import Content from "./home_components/content";
-//import { useNavigate } from "react-router";
 import { Outlet } from "react-router";
 import Aside from "./aside";
 import Header from "./header";
-//import { useAuth } from "./AuthContext";
 
 function Home() {
   return (

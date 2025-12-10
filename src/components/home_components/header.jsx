@@ -56,15 +56,12 @@ function Header() {
 
   return (
     <header className="col-span-full sticky top-0 z-50 bg-blue-100 shadow">
-      <nav className="flex px-5 py-3 justify-between">
+      <nav className="flex px-5 py-3 gap-8 justify-between">
         <a className="flex items-center gap-3 text-2xl font-bold">
           <Book size={20} />
           BiblioGest
         </a>
         <ul className="flex gap-4 items-center">
-          <li>Libros</li>
-          <li>Sedes</li>
-
           <li>
             <Dropdown menu={{ items }}>
               <div className="p-2 rounded-full bg-blue-200 hover:bg-blue-300 transition">
