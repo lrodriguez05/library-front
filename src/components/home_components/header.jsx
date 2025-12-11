@@ -1,7 +1,7 @@
 import { Book, LogOut, UserRound } from "lucide-react";
 import { useAuth } from "../auth_components/AuthContext";
 import { Dropdown } from "antd";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Header() {
   const { logout } = useAuth();
@@ -22,13 +22,9 @@ function Header() {
     {
       key: "2",
       label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          Mi Cuenta 2
-        </a>
+        <Link to="/account/settings" className="flex items-center gap-2">
+          Configuracion
+        </Link>
       ),
     },
     {

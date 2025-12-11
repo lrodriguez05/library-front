@@ -12,6 +12,7 @@ import ListaLibros from "./components/home_components/book/book_components/book_
 import EditBook from "./components/home_components/book/book_components/edit_book";
 import Prestamos from "./components/home_components/loan";
 import Details from "./components/home_components/details_components/details";
+import AccountSettings from "./components/user_components/account_settings";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);
@@ -29,7 +30,9 @@ function App() {
             <Route index path="crearLibro" element={<CrearLibro />} />
           </Route>
         </Route>
-
+        <Route path="account" element={<Outlet />}>
+          <Route path="settings" element={<AccountSettings />} />
+        </Route>
         <Route path="sedes" element={<Sedes />} />
 
         <Route path="crearSede" element={<CrearSede />} />
