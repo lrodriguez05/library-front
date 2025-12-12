@@ -1,6 +1,7 @@
 import { Edit } from "lucide-react";
-import moment from "moment";
-import { useState } from "react";
+import moment from "moment/min/moment-with-locales";
+moment.locale("es");
+import { useState, useEffect } from "react";
 import EditReview from "./edit_review";
 import { Rate } from "antd";
 
@@ -19,17 +20,17 @@ function ReviewRender({ reviews, fetchData }) {
         <p>No hay reseñas para este libro aún</p>
       ) : (
         reviews.map((review) => (
-          <div className="py-4 flex items-center gap-3" key={review.id}>
+          <div className="py-4 flex items-start gap-3" key={review.id}>
             <img
-              className="w-12 h-12 rounded-full"
+              className="w-10 h-10 rounded-full"
               src={review.avatar}
               alt="avatar"
             ></img>
-            <div className="font-bold bg-gray-200 p-2 rounded max-w-6/12">
-              <div className="flex justify-between">
-                <p>Usuario: {review.username}</p>
+            <div className="font-bold bg-white py-1 px-3 rounded-lg shadow-md max-w-6/12">
+              <div className="flex justify-between gap-7 items-center">
+                <p>{review.username}</p>
                 <div className="flex gap-3">
-                  <p>{review.editado ? "Editado" : ""}</p>
+                  <p>{moment(review.fecha).local().fromNow()}</p>
                   {review.username === localStorage.getItem("username") && (
                     <Edit
                       size={20}
@@ -41,7 +42,7 @@ function ReviewRender({ reviews, fetchData }) {
               <p className="py-2">{review.comentario}</p>
               <div className="flex justify-between gap-5 items-center">
                 <Rate disabled allowHalf value={review.calificacion / 2} />
-                <p>{moment(review.fecha).local().format("DD/MM/YYYY HH:mm")}</p>
+                <p>{review.editado ? "(editado)" : ""}</p>
               </div>
             </div>
           </div>
