@@ -9,20 +9,19 @@ function Details() {
   const { id } = useParams();
   const [dataBook, setDataBook] = useState(null);
   const [reviews, setReviews] = useState([]);
-
+  const fetchData = async () => {
+    try {
+      const [libro, resenas] = await Promise.all([
+        getBookById(id),
+        getReviewsByBookId(id),
+      ]);
+      setDataBook(libro);
+      setReviews(resenas);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [libro, resenas] = await Promise.all([
-          getBookById(id),
-          getReviewsByBookId(id),
-        ]);
-        setDataBook(libro);
-        setReviews(resenas);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, [id]);
 
@@ -31,10 +30,8 @@ function Details() {
       <section className="p-6 bg-white shadow-md rounded-lg">
         <DetailsRender dataBook={dataBook} />
       </section>
-
-      <hr></hr>
       <section className="p-4">
-        <ReviewRender reviews={reviews} />
+        <ReviewRender reviews={reviews} fetchData={fetchData} />
       </section>
     </>
   );
