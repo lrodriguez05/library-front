@@ -31,7 +31,7 @@ function EditReview({ id, open, setOpen, fetchData }) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          comentario: review,
+          comentario: review.trim(),
           calificacion: String(rating),
         }),
       }
@@ -54,30 +54,29 @@ function EditReview({ id, open, setOpen, fetchData }) {
       }}
       confirmLoading={loading}
     >
-      {review ? (
-        <div>
-          <form>
-            <div className="flex flex-col mb-4">
-              <label className="text-lg mb-2">Comentario</label>
-              <textarea
-                className="border p-3 rounded-lg"
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
-              ></textarea>
-            </div>
-            <div className="flex flex-col mb-4 text-center">
-              <label className="text-lg mb-2">Calificación</label>
-              <Rate
-                allowHalf
-                value={rating / 2}
-                onChange={(value) => setRating(value * 2)}
-              />
-            </div>
-          </form>
-        </div>
-      ) : (
-        <p>Cargando...</p>
-      )}
+      <div>
+        <form>
+          <div className="flex flex-col mb-4">
+            <label className="text-lg mb-2">Comentario</label>
+            <textarea
+              className="border p-3 rounded-lg"
+              value={review}
+              onChange={(e) => {
+                if (e.target.value.length <= 300) setReview(e.target.value);
+              }}
+            ></textarea>
+            <p className="text-sm opacity-70 text-end">{review?.length}/300</p>
+          </div>
+          <div className="flex flex-col mb-4 text-center">
+            <label className="text-lg mb-2">Calificación</label>
+            <Rate
+              allowHalf
+              value={rating / 2}
+              onChange={(value) => setRating(value * 2)}
+            />
+          </div>
+        </form>
+      </div>
     </Modal>
   );
 }

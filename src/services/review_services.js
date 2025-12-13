@@ -81,3 +81,22 @@ export const getReviewsByUser = async (userId) => {
     throw error;
   }
 };
+
+export const deleteReviewById = async (id) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/lib/resenas/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Error al eliminar la reseña");
+    }
+  } catch (error) {
+    console.error("Error al eliminar la reseña:", error);
+  }
+};

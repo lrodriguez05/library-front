@@ -84,7 +84,7 @@ function Prestamos() {
             setOpenModal(false);
           }}
         >
-          <form className="space-y-4 py-4 bg-white">
+          <form className="space-y-2 py-4 bg-white">
             <div className="flex flex-col">
               <label className="text-lg mb-2">Calificacion de 1-10</label>
               <input
@@ -98,13 +98,16 @@ function Prestamos() {
             </div>
             <div className="flex flex-col">
               <label className="text-lg mb-2">Escriba su reseña</label>
-              <input
+              <textarea
                 className="border p-3 rounded-lg"
                 type="text"
                 value={resena}
-                onChange={(e) => setResena(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 300) setResena(e.target.value);
+                }}
               />
             </div>
+            <p className="text-sm opacity-70 text-end">{resena.length}/300</p>
           </form>
         </Modal>
       </div>
