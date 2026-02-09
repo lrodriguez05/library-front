@@ -3,15 +3,15 @@ import Home from "./components/home_components/home";
 import Login from "./components/auth_components/login";
 import Register from "./components/auth_components/register";
 
-import User from "./components/home_components/user";
+import User from "./components/user_components/user";
 import Dashboard from "./components/home_components/dashboard";
-import CrearLibro from "./components/home_components/book/book_components/create_book";
+import CrearLibro from "./components/book/book_components/create_book";
 import CrearSede from "./components/home_components/create_sede";
-import Sedes from "./components/home_components/sede";
-import ListaLibros from "./components/home_components/book/book_components/book_list";
-import EditBook from "./components/home_components/book/book_components/edit_book";
-import Prestamos from "./components/home_components/loan";
-import Details from "./components/home_components/details_components/details";
+import Sedes from "./components/sede/sede";
+import ListaLibros from "./components/book/book_components/book_list";
+import EditBook from "./components/book/book_components/edit_book";
+import Prestamos from "./components/loan/loan";
+import Details from "./components/book/details_components/details";
 import AccountSettings from "./components/user_components/account_settings";
 
 function App() {

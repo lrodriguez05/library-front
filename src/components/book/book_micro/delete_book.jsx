@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Trash } from "lucide-react";
-import { useAuth } from "../../../auth_components/AuthContext";
-import { deleteBookById } from "../../../../services/book_services";
+import { useAuth } from "../../auth_components/AuthContext";
+import { deleteBookById } from "../../../services/book_services";
 import { BookContext } from "../book_components/book_list";
 
 export function Delete({ id }) {

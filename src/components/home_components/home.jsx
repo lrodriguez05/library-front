@@ -1,10 +1,12 @@
 import { Outlet } from "react-router";
 import Aside from "./aside";
 import Header from "./header";
+import AiBubble from "../ai_components/ai";
 
 function Home() {
   return (
     <section className="grid grid-rows-[auto_1fr] md:grid-cols-[minmax(200px,15%)_1fr] h-screen bg-slate-100">
+      <AiBubble />
       <Header />
       <Aside />
       <main className="overflow-y-auto flex flex-col min-h-0 px-5 pt-5">

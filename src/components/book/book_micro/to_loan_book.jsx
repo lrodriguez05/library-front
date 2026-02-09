@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Modal } from "antd";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../../../auth_components/AuthContext";
+import { useAuth } from "../../auth_components/AuthContext";
 import { BookContext } from "../book_components/book_list";
 
 export function ToLoan({ id, title }) {
@@ -35,7 +35,7 @@ export function ToLoan({ id, title }) {
             usuario: userId,
             fecha_devolucion: date,
           }),
-        }
+        },
       );
       const data = await response.json();
       if (response.ok) {

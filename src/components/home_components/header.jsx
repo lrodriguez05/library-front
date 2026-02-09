@@ -59,7 +59,7 @@ function Header() {
         </a>
         <ul className="flex gap-4 items-center">
           <li>
-            <Dropdown menu={{ items }}>
+            <Dropdown menu={{ items }} trigger={["click"]}>
               <div className="p-2 rounded-full bg-blue-200 hover:bg-blue-300 transition">
                 <a onClick={(e) => e.preventDefault()}>
                   <UserRound size={26} />

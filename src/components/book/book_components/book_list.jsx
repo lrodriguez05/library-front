@@ -1,9 +1,9 @@
 import { Table } from "antd";
 import { createContext } from "react";
-import { useAuth } from "../../../auth_components/AuthContext";
+import { useAuth } from "../../auth_components/AuthContext";
 import { Link } from "react-router";
 import { Outlet } from "react-router";
-import { useFetchLibros } from "../../../../hooks/useLibros";
+import { useFetchLibros } from "../../../hooks/useLibros";
 import { columnsGenerator } from "../book_micro/columns";
 
 export const BookContext = createContext();
