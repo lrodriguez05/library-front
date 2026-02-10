@@ -1,7 +1,6 @@
 import Modal from "antd/es/modal/Modal";
-import { ArrowLeftIcon } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { BookContext } from "./book_list";
 
 function CrearLibro() {
@@ -24,7 +23,7 @@ function CrearLibro() {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
         if (!response.ok) throw new Error("Error al cargar sedes");
         const data = await response.json();
@@ -67,7 +66,7 @@ function CrearLibro() {
             sede_id: sedeId,
             cantidad: cantidad,
           }),
-        }
+        },
       );
       if (response.ok) {
         setTitle("");

@@ -15,12 +15,12 @@ function AiChat({ setIsOpen }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!message.trim()) return;
     try {
       setLoading(true);
-      if (!message.trim()) return;
+      const userMessage = message.trim();
       setMessage("");
-      setMessages((prev) => [...prev, { content: message, role: "user" }]);
+      setMessages((prev) => [...prev, { content: userMessage, role: "user" }]);
 
       // setTimeout(() => {
       //   setMessages((prev) => [
@@ -36,6 +36,7 @@ function AiChat({ setIsOpen }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ message }),
       });
@@ -79,7 +80,7 @@ function AiChat({ setIsOpen }) {
         <div ref={bottomRef} />
       </main>
       <footer className="p-2">
-        <form className="flex" onSubmit={(e) => handleSubmit(e)}>
+        <form className="flex" onSubmit={handleSubmit}>
           <div className="flex justify-between w-full items-center">
             <input
               type="text"
@@ -91,6 +92,7 @@ function AiChat({ setIsOpen }) {
               disabled={loading}
             />
             <button
+              type="submit"
               className={`flex items-center justify-center transition-all duration-300 rounded-full
                  ${message ? " bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-l-none rounded-r-full ease-in-out" : "opacity-0 pointer-events-none w-0"} `}
             >
