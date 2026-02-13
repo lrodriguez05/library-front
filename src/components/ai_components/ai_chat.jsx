@@ -16,36 +16,60 @@ function AiChat({ setIsOpen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
+
+    setLoading(true);
+    const userMessage = message.trim();
+    setMessage("");
+
+    // Mensaje del usuario
+    setMessages((prev) => [
+      ...prev,
+      { content: userMessage, role: "user" },
+      { content: "", role: "ai" }, // placeholder IA
+    ]);
+
     try {
-      setLoading(true);
-      const userMessage = message.trim();
-      setMessage("");
-      setMessages((prev) => [...prev, { content: userMessage, role: "user" }]);
-
-      // setTimeout(() => {
-      //   setMessages((prev) => [
-      //     ...prev,
-      //     {
-      //       content: `Simulation http://localhost:5173/libros/detalles/46`,
-      //       role: "ai",
-      //     },
-      //   ]);
-      // }, 1000);
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/ai`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/ai/stream-cerebras`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ message: userMessage }),
         },
-        body: JSON.stringify({ message }),
-      });
-      const data = await response.json();
-      setMessages((prev) => {
-        return [...prev, { content: data.message, role: "ai" }];
-      });
-    } catch (error) {
-      console.error("Error fetching AI response:", error);
+      );
+
+      if (!response.body) throw new Error("No stream");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let aiText = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        // 🔹 Si tu backend usa SSE:
+        const cleaned = chunk.replace(/^data:\s*/gm, "").replace(/\n\n/g, "");
+
+        aiText += cleaned;
+
+        setMessages((prev) => {
+          const copy = [...prev];
+          copy[copy.length - 1] = {
+            ...copy[copy.length - 1],
+            content: aiText,
+          };
+          return copy;
+        });
+      }
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
