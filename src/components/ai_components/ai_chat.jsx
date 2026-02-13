@@ -21,7 +21,7 @@ function AiChat({ setIsOpen }) {
     const userMessage = message.trim();
     setMessage("");
 
-    // Mensaje del usuario
+    // Mensaje del usuario from api
     setMessages((prev) => [
       ...prev,
       { content: userMessage, role: "user" },
